@@ -1,1 +1,9 @@
+# Python venv
+venv/
+# SQLite database
+bot_data.db
+# Environment variables
 .env
+# Editor files
+*.pyc
+__pycache__/
