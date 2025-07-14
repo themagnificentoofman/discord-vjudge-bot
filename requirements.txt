@@ -1,0 +1,4 @@
+py-cord>=2.0.0
+online-judge-tools>=14.0.0
+aiosqlite>=0.18.0
+python-dotenv>=0.21.0
