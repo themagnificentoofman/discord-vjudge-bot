@@ -40,12 +40,14 @@ def run_oj(args: list[str]) -> subprocess.CompletedProcess:
 
 
 async def oj_login(username: str, password: str):
+    """
+    Log in via oj using the correct flags: -u and -p.
+    """
     cp = run_oj([
         "login", "https://vjudge.net/user/login",
-        "--username", username,
-        "--password", password,
+        "-u", username,
+        "-p", password,
     ])
-    # log both stdout and stderr
     print(f"[DEBUG] oj login stdout:\n{cp.stdout}")
     print(f"[DEBUG] oj login stderr:\n{cp.stderr}")
     if cp.returncode != 0:
@@ -55,15 +57,17 @@ async def oj_login(username: str, password: str):
             f"STDERR:\n{cp.stderr}"
         )
 
-async def oj_submit(problem_url: str, source_path: str, language: str) -> str:
+async def oj_submit(problem_url: str, source_path: str) -> str:
+    # note: drop --language if it’s not supported, or place flags first
     cp = run_oj([
-        "submit", problem_url,
-        "--language", language,
-        source_path
+        "submit", problem_url, source_path,
+        "--yes",       # auto‑confirm
+        "--wait=0",    # no delay
+        "--language", language,    # if supported; else omit and rely on auto‑detect
     ])
     if cp.returncode != 0:
         raise RuntimeError(f"oj submit failed:\n{cp.stderr}")
-    # assume last token of stdout is the submission ID
+    # parse submission ID…
     return cp.stdout.strip().split()[-1]
 
 async def oj_get_result(submission_id: str) -> dict:
