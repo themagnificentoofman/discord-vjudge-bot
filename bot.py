@@ -139,7 +139,13 @@ async def on_ready():
 
 # ──────── Slash Commands ────────
 
-@bot.slash_command(description="Link your VJudge credentials")
+GUILD_ID = 1394424001845137468  # replace with *your* test server’s ID
+
+@bot.slash_command(
+    name="vjudge_link",
+    description="Link your VJudge credentials",
+    guild_ids=[GUILD_ID],
+)
 async def vjudge_link(
     ctx: discord.ApplicationContext,
     username: Option(str, "Your VJudge username"),
