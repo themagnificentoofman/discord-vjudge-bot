@@ -23,13 +23,21 @@ DB_FILE      = os.getenv("DB_FILE", "bot_data.db")  # used only if DATABASE_URL 
 
 # ──────── OJ Helpers ────────
 
+import shutil
+
+# Find the `oj` executable in PATH (e.g. /app/.heroku/python/bin/oj)
+OJ_CMD = shutil.which("oj") or "oj"
+
 def run_oj(args: list[str]) -> subprocess.CompletedProcess:
-    """Invoke `oj` as a module under this Python interpreter."""
+    """
+    Invoke the `oj` console script directly, not as a module.
+    """
     return subprocess.run(
-        [sys.executable, "-m", "oj", *args],
+        [OJ_CMD, *args],
         capture_output=True,
         text=True,
     )
+
 
 async def oj_login(username: str, password: str):
     cp = run_oj([
