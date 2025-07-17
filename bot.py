@@ -45,8 +45,15 @@ async def oj_login(username: str, password: str):
         "--username", username,
         "--password", password,
     ])
+    # log both stdout and stderr
+    print(f"[DEBUG] oj login stdout:\n{cp.stdout}")
+    print(f"[DEBUG] oj login stderr:\n{cp.stderr}")
     if cp.returncode != 0:
-        raise RuntimeError(f"oj login failed:\n{cp.stderr}")
+        raise RuntimeError(
+            f"oj login failed (exit {cp.returncode})\n"
+            f"STDOUT:\n{cp.stdout}\n"
+            f"STDERR:\n{cp.stderr}"
+        )
 
 async def oj_submit(problem_url: str, source_path: str, language: str) -> str:
     cp = run_oj([
